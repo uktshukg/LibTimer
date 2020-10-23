@@ -1,5 +1,6 @@
 package com.dexter.baseproject.frag_one
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import com.jakewharton.rxrelay2.PublishRelay
 import dagger.Lazy
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,7 +19,6 @@ import javax.inject.Inject
 
 
 abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
-    label: String,
     @LayoutRes contentLayoutId: Int = 0
 ) : Fragment(contentLayoutId), UserInterfaceWithViewEvents<E> , UserInterface<S>, LifecycleObserver {
     private val viewEventsRelay: PublishRelay<E> = PublishRelay.create()
@@ -25,10 +26,16 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
     protected val intentRelay by lazy { PublishRelay.create<UserIntent>() }
      var schedulerProvider =  AndroidSchedulers.mainThread()
     private var disposable: Disposable? = null
-
+    @Inject
+    lateinit var presenter: Lazy<Presenter<S, E>>
     private lateinit var currentState: S
     protected fun getCurrentState(): S {
         return currentState
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     override fun onResume() {
@@ -57,8 +64,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
         )
     }
     private val subscriptions: CompositeDisposable by lazy { CompositeDisposable() }
-    @Inject
-    lateinit var presenter: Lazy<Presenter<S, E>>
+
     protected fun addSubscription(disposable: Disposable) {
         if (!disposable.isDisposed) {
             subscriptions.add(disposable)
