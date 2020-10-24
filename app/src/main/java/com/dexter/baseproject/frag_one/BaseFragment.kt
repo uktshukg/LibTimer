@@ -33,6 +33,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
         return currentState
     }
 
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
