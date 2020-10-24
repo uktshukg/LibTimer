@@ -23,9 +23,10 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
 ) : Fragment(contentLayoutId), UserInterfaceWithViewEvents<E> , UserInterface<S>, LifecycleObserver {
     private val viewEventsRelay: PublishRelay<E> = PublishRelay.create()
 
-    protected val intentRelay by lazy { PublishRelay.create<UserIntent>() }
-     var schedulerProvider =  AndroidSchedulers.mainThread()
-    private var disposable: Disposable? = null
+    private val intentRelay by lazy { PublishRelay.create<UserIntent>() }
+    private var schedulerProvider =  AndroidSchedulers.mainThread()
+    protected val disposable: CompositeDisposable by lazy { CompositeDisposable() }
+    private val subscriptions: CompositeDisposable by lazy { CompositeDisposable() }
     @Inject
     lateinit var presenter: Lazy<Presenter<S, E>>
     private lateinit var currentState: S
@@ -64,7 +65,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
             )
         )
     }
-    private val subscriptions: CompositeDisposable by lazy { CompositeDisposable() }
+
 
     protected fun addSubscription(disposable: Disposable) {
         if (!disposable.isDisposed) {
@@ -79,20 +80,21 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            disposable = presenter.get().viewEvent()
+            disposable.add(presenter.get().viewEvent()
                 .observeOn(schedulerProvider)
                 .subscribe(
                     {
                         val viewEvent =  it as E
                         handleViewEvent(viewEvent)
                     }, {
-                    })
+                    }))
         }
 
 
     override fun onDestroyView() {
+        disposable.clear()
         super.onDestroyView()
-        disposable?.dispose()
+
     }
 
 }

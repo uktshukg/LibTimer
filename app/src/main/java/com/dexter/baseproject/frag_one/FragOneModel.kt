@@ -7,9 +7,18 @@ interface FragOneModel {
         object ServerErrorToast : ViewEvent()
     }
     sealed class Intent : UserIntent {
+        data class ScanData(val scanResults: String) : Intent()
+
+
+
         object Load : Intent()
     }
 
-     class PartialState : UiState.Partial<State> {
+     sealed class PartialState : UiState.Partial<State> {
+         object NoChange : PartialState()
     }
+
+    data class QRInfo(val locationId: String?= null, val locationDetails: String?= null, val pricePerMin: Float?= null)
+
+
 }

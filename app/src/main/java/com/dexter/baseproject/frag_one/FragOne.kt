@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import com.dexter.baseproject.R
 import com.google.zxing.integration.android.IntentIntegrator
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +30,7 @@ class FragOne : BaseFragment<FragOneModel.State, FragOneModel.ViewEvent, FragOne
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var scanSubject: PublishSubject<String> = PublishSubject.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,23 +47,7 @@ class FragOne : BaseFragment<FragOneModel.State, FragOneModel.ViewEvent, FragOne
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragOne.
-         */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
@@ -78,20 +65,25 @@ class FragOne : BaseFragment<FragOneModel.State, FragOneModel.ViewEvent, FragOne
             if (result.contents == null) {
                Log.e("utkarsh","inside 1")
             } else {
-                Log.e("utkarsh","inside 2")
-                startTimer()
+                data?.let {
+                    Log.e("utkarsh","inside 2"+ scanSubject.onNext(result.contents.toString()))
+                }
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    private fun startTimer() {
-
-    }
 
     override fun userIntents(): Observable<UserIntent> {
-      return Observable.just(FragOneModel.Intent.Load)
+        return Observable.mergeArray(
+                Observable.just(FragOneModel.Intent.Load),
+
+                scanSubject.map {
+                    FragOneModel.Intent.ScanData(it)
+                }
+        )
     }
 
     override fun render(state: FragOneModel.State) {
