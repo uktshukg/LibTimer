@@ -2,6 +2,7 @@ package com.dexter.baseproject.frag_one
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
@@ -24,7 +25,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
     private val viewEventsRelay: PublishRelay<E> = PublishRelay.create()
 
     private val intentRelay by lazy { PublishRelay.create<UserIntent>() }
-    private var schedulerProvider =  AndroidSchedulers.mainThread()
+     protected var schedulerProvider =  AndroidSchedulers.mainThread()
     protected val disposable: CompositeDisposable by lazy { CompositeDisposable() }
     private val subscriptions: CompositeDisposable by lazy { CompositeDisposable() }
     @Inject
@@ -51,7 +52,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
                     this.currentState = it
                     render(it)
                 }, {
-
+         Log.e("utkarsh ","inside throwable "+it.message)
                 })
         )
 

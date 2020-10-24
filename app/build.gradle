@@ -88,4 +88,6 @@ dependencies {
 
     // multidex
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'org.apache.commons:commons-text:1.6'
 }

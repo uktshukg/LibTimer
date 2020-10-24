@@ -1,5 +1,6 @@
 package com.dexter.baseproject.frag_one
 
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
@@ -93,6 +94,7 @@ abstract class BasePresenter<S : UiState, P : UiState.Partial<S>, E: BaseViewEve
                             val newState = reduce(currentState, partialState as P)
                             newState
                         } catch (e: Exception) {
+                            Log.e("utkarsh ","inside throwable 3 "+e.message)
                             currentState
                         }
                     }
@@ -101,7 +103,9 @@ abstract class BasePresenter<S : UiState, P : UiState.Partial<S>, E: BaseViewEve
                         synchronized(this) {
                             stateRelay.accept(it)
                         }
-                    }, {})
+                    }, {
+                        Log.e("utkarsh ","inside throwable 2 "+it.message)
+                    })
             )
             isStateSetup = true
         }
