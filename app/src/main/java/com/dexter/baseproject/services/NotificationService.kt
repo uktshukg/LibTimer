@@ -27,6 +27,9 @@ class NotificationService : IntentService("MyService") {
 
 
     override fun onHandleIntent(p0: Intent?) {
+        val locationId = SharedPref.getString("locationId", applicationContext)
+        val price = SharedPref.getFloat("price", applicationContext)
+        val locationDetails = SharedPref.getString("details", applicationContext)
          val notificationManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
              applicationContext.getSystemService(NotificationManager::class.java)
         } else {
@@ -46,7 +49,7 @@ class NotificationService : IntentService("MyService") {
          countDownLatch = CountDownLatch(1)
         disposable=  Observable.interval(1, TimeUnit.SECONDS).subscribe {
             Log.e("utkarsh","inside intervalRange "+it)
-           showProgress(System.currentTimeMillis()- startTime, notificationManager)
+           showProgress(System.currentTimeMillis()- startTime, notificationManager, locationDetails, locationId, price)
         }
         Log.e("utkarsh","inside")
         countDownLatch.await()
@@ -54,7 +57,10 @@ class NotificationService : IntentService("MyService") {
     }
     private fun showProgress(
         progress: Long,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        locationDetails: String,
+        locationId: String,
+        price: Float
     ) {
         val notification = NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
@@ -62,7 +68,8 @@ class NotificationService : IntentService("MyService") {
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setOngoing(true)
-            .setContentText(convertMILLISToStandard(progress.toLong()))
+            .setStyle(NotificationCompat.BigTextStyle().setSummaryText(convertMILLISToStandard(progress).toString()))
+            .setContentText(convertMILLISToStandard(progress).toString()+"\n location deatils "+locationDetails+"\n price "+price+" \n location id"+locationId+"\n")
             .build()
         notificationManager?.notify(NOTIFICATION_ID, notification)
     }

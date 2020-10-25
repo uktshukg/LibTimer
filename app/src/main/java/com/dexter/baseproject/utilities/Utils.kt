@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
     val minute = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.MILLISECONDS.toHours(millis) * 60
     val second = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MILLISECONDS.toMinutes(millis) * 60
 
-    return ("Day $day Hour $hours Minute $minute Seconds $second")
+    return ("Hour $hours Minute $minute Seconds $second")
 }
 
 object SharedPref{
