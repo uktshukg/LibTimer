@@ -81,6 +81,7 @@ class MainFragPresenter @Inject constructor(
                         }
 
                         is Result.Failure -> {
+                            emitViewEvent(MainFragContract.ViewEvent.ServerErrorToast)
                             MainFragContract.PartialState.ErrorState
 
                         }
@@ -116,6 +117,7 @@ class MainFragPresenter @Inject constructor(
                         }
 
                         is Result.Failure -> {
+                            emitViewEvent(MainFragContract.ViewEvent.ServerErrorToast)
                             MainFragContract.PartialState.ErrorState
 
                         }
