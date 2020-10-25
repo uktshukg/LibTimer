@@ -1,4 +1,4 @@
-package com.dexter.baseproject.base
+package com.dexter.base.base
 
 interface UiState {
     interface Partial<T> {

@@ -7,9 +7,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.dexter.base.base.BaseFragment
+import com.dexter.base.base.UserIntent
 import com.dexter.baseproject.R
-import com.dexter.baseproject.base.BaseFragment
-import com.dexter.baseproject.base.UserIntent
 import com.dexter.baseproject.utilities.SharedPref
 import com.dexter.baseproject.utilities.convertMILLISToStandard
 import com.google.zxing.integration.android.IntentIntegrator

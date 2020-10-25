@@ -1,4 +1,4 @@
-package com.dexter.baseproject.base
+package com.dexter.base.base
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

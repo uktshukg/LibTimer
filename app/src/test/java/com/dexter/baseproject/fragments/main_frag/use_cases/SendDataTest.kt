@@ -2,7 +2,7 @@ package com.dexter.baseproject.fragments.main_frag.use_cases
 
 import android.content.Context
 import com.dexter.baseproject.api.IApiClient
-import com.dexter.baseproject.base.Result
+import com.dexter.base.base.Result
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

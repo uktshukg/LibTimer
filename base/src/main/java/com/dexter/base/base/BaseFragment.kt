@@ -1,4 +1,4 @@
-package com.dexter.baseproject.base
+package com.dexter.base.base
 
 import android.content.Context
 import android.os.Bundle
@@ -19,7 +19,9 @@ import javax.inject.Inject
 
 abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
     @LayoutRes contentLayoutId: Int = 0
-) : Fragment(contentLayoutId), UserInterfaceWithViewEvents<E>, UserInterface<S>, LifecycleObserver {
+) : Fragment(contentLayoutId),
+    UserInterfaceWithViewEvents<E>,
+    UserInterface<S>, LifecycleObserver {
     private val viewEventsRelay: PublishRelay<E> = PublishRelay.create()
 
     private val intentRelay by lazy { PublishRelay.create<UserIntent>() }

@@ -4,7 +4,7 @@ import android.util.Log
 import com.dexter.baseproject.api.ApiClient
 import com.dexter.baseproject.api.ApiClientImpl
 import com.dexter.baseproject.api.IApiClient
-import com.dexter.baseproject.base.Presenter
+import com.dexter.base.base.Presenter
 import com.dexter.baseproject.fragments.main_frag.MainFrag
 import com.dexter.baseproject.fragments.main_frag.MainFragContract
 import com.dexter.baseproject.fragments.main_frag.MainFragPresenter

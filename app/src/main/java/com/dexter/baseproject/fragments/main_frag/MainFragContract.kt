@@ -1,8 +1,8 @@
 package com.dexter.baseproject.fragments.main_frag
 
-import com.dexter.baseproject.base.BaseViewEvent
-import com.dexter.baseproject.base.UiState
-import com.dexter.baseproject.base.UserIntent
+import com.dexter.base.base.BaseViewEvent
+import com.dexter.base.base.UiState
+import com.dexter.base.base.UserIntent
 
 interface MainFragContract {
     data class State(val loading:Boolean= false,

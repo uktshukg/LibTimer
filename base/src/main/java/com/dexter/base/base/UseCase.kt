@@ -1,4 +1,4 @@
-package com.dexter.baseproject.base
+package com.dexter.base.base
 
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -11,7 +11,11 @@ interface UseCase<RequestT, ResponseT> {
     companion object {
 
         fun <ResponseT> wrapObservable(s: Observable<ResponseT>): Observable<Result<ResponseT>> {
-            return s.map<Result<ResponseT>> { Result.Success(it) }
+            return s.map<Result<ResponseT>> {
+                Result.Success(
+                    it
+                )
+            }
                 .startWith(Result.Progress())
                 .onErrorReturn {
                     Result.Failure(it)
@@ -19,12 +23,13 @@ interface UseCase<RequestT, ResponseT> {
         }
 
         fun <ResponseT> wrapSingle(s: Single<ResponseT>): Observable<Result<ResponseT>> {
-            return wrapObservable<ResponseT>(s.flatMapObservable<ResponseT> { Observable.just(it) })
+            return wrapObservable<ResponseT>(
+                s.flatMapObservable<ResponseT> { Observable.just(it) })
         }
 
         fun wrapCompletable(c: Completable): Observable<Result<Unit>> {
             return wrapSingle(
-                    c.andThen(Single.just(Unit))
+                c.andThen(Single.just(Unit))
             )
         }
 

@@ -1,4 +1,4 @@
-package com.dexter.baseproject.base
+package com.dexter.base.base
 
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable

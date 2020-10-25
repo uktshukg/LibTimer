@@ -1,10 +1,10 @@
 package com.dexter.baseproject.fragments.main_frag
 
 import android.content.Context
+import com.dexter.base.base.BasePresenter
+import com.dexter.base.base.Result
+import com.dexter.base.base.UiState
 import com.dexter.baseproject.R
-import com.dexter.baseproject.base.BasePresenter
-import com.dexter.baseproject.base.Result
-import com.dexter.baseproject.base.UiState
 import com.dexter.baseproject.fragments.main_frag.use_cases.SendData
 import com.dexter.baseproject.utilities.ParseScanResults
 import com.dexter.baseproject.utilities.SharedPref
@@ -54,17 +54,17 @@ class MainFragPresenter @Inject constructor(
                                 )
                                 SharedPref.setFloat(
                                     name = "price",
-                                    value = it.value.pricePerMin,
+                                    value = it.value.pricePerMin!!,
                                     context = context
                                 )
                                 SharedPref.setString(
                                     name = "locationId",
-                                    value = it.value.locationId,
+                                    value = it.value.locationId!!,
                                     context = context
                                 )
                                 SharedPref.setString(
                                     name = "details",
-                                    value = it.value.locationDetails,
+                                    value = it.value.locationDetails!!,
                                     context = context
                                 )
                                 emitViewEvent(MainFragContract.ViewEvent.ResumeTimer)
@@ -132,7 +132,7 @@ class MainFragPresenter @Inject constructor(
                 locationId = partialState.locationId,
                 pricePerMin = partialState.pricePerMin,
                 canShowError = false,
-                session= partialState.session
+                session = partialState.session
             )
             MainFragContract.PartialState.ErrorState -> currentState.copy(canShowError = true)
             is MainFragContract.PartialState.SetResult -> currentState.copy(
