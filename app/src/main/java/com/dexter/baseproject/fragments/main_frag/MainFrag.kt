@@ -97,6 +97,7 @@ class MainFrag :
                 amount.text = getString(R.string.amount) + state.amount
                 duration.text = getString(R.string.duration) + state.duration
                 timerDisposable?.dispose()
+                timerDisposable = null
                 scanNow.text = "Scan Now"
                 LocalBroadcastManager.getInstance(context!!)
                     .sendBroadcast(Intent("NOTIFICATION_FILTER"))
@@ -125,6 +126,7 @@ class MainFrag :
 
     override fun onPause() {
         timerDisposable?.dispose()
+        timerDisposable= null
         super.onPause()
     }
 
@@ -139,10 +141,14 @@ class MainFrag :
         time?.let { tv ->
             val startTime =
                 SharedPref.getLong(context, context!!.getString(R.string.start_time))
-            timerDisposable =
-                Observable.interval(1, TimeUnit.SECONDS).observeOn(schedulerProvider).subscribe {
-                    tv.text = convertMILLISToStandard((System.currentTimeMillis() - startTime))
-                }
+            if(timerDisposable==null) {
+                timerDisposable =
+                    Observable.interval(1, TimeUnit.SECONDS).observeOn(schedulerProvider)
+                        .subscribe {
+                            tv.text =
+                                convertMILLISToStandard(System.currentTimeMillis() - startTime)
+                        }
+            }
         }
     }
 

@@ -20,8 +20,7 @@ interface MainFragContract {
     }
     sealed class ViewEvent : BaseViewEvent {
         object ServerErrorToast : ViewEvent()
-        object ResumeTimer : ViewEvent() {
-        }
+        object ResumeTimer : ViewEvent()
     }
     sealed class Intent : UserIntent {
         data class ScanData(val scanResults: String) : Intent()
