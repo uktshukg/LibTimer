@@ -9,7 +9,6 @@ import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.multidex.MultiDex
 import androidx.work.*
-import com.dexter.baseproject.frag_one.ForegroundWorker
 import com.dexter.baseproject.services.NotificationService
 import com.dexter.baseproject.utilities.SharedPref
 import dagger.android.AndroidInjector
@@ -17,20 +16,13 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCallbacks,
-    Configuration.Provider {
+class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCallbacks{
 
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setMinimumLoggingLevel(android.util.Log.VERBOSE)
-            .build()
+
     companion object{
         var instance: App = App()
     }
     var isWorkManagerStarted: Boolean = false
-
-    @Inject
-    lateinit var worker: TimeWorker
 
     @Inject
     lateinit var context: Context
