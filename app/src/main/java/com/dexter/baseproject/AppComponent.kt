@@ -7,10 +7,13 @@ import dagger.android.support.AndroidSupportInjectionModule
 
 @Component(modules = [ActivityBindingModule::class,
     AndroidInjectionModule::class,
+    NetworkModule::class,
+    AppModule::class,
     AndroidSupportInjectionModule::class])
 interface AppComponent {
 
     fun inject(application: App)
+
 
     @Component.Builder
     interface Builder {
@@ -19,6 +22,8 @@ interface AppComponent {
 
         @BindsInstance
         fun applicationBind(application: App): Builder
+
+
 
     }
 }

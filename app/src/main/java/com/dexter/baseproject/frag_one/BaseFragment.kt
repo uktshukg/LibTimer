@@ -52,7 +52,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
                     this.currentState = it
                     render(it)
                 }, {
-         Log.e("utkarsh ","inside throwable "+it.message)
+         Log.e("utkarsh ","inside throwable "+it.printStackTrace())
                 })
         )
 

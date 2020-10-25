@@ -6,7 +6,7 @@ import io.reactivex.Single
 
 
 interface UseCase<RequestT, ResponseT> {
-    fun execute(req: RequestT): Observable<Result<ResponseT>>
+    fun execute(req:RequestT): Observable<Result<ResponseT>>
 
     companion object {
 
