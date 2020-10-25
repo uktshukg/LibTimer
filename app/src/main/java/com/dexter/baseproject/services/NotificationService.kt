@@ -11,7 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.dexter.baseproject.utilities.ConvertMILLISToStandard
+import com.dexter.baseproject.utilities.convertMILLISToStandard
 import com.dexter.baseproject.R
 import com.dexter.baseproject.utilities.SharedPref
 import io.reactivex.Observable
@@ -62,7 +62,7 @@ class NotificationService : IntentService("MyService") {
             .setOnlyAlertOnce(true)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setOngoing(true)
-            .setContentText(ConvertMILLISToStandard(progress.toLong()))
+            .setContentText(convertMILLISToStandard(progress.toLong()))
             .build()
         notificationManager?.notify(NOTIFICATION_ID, notification)
     }

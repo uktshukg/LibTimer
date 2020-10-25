@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.multidex.MultiDex
-import androidx.work.*
 import com.dexter.baseproject.services.NotificationService
 import com.dexter.baseproject.utilities.SharedPref
 import dagger.android.AndroidInjector
@@ -55,8 +54,6 @@ class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCall
             isWorkManagerStarted = false
             Log.e("utkarsh","inside manager stop ")
             LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("abc"));
-                WorkManager.getInstance(context).cancelAllWorkByTag("timer")
-
         }
     }
 
@@ -83,11 +80,5 @@ class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCall
 
     override fun onActivityResumed(p0: Activity) {
     }
-
-    fun cancelWorker() {
-//        WorkManager.getInstance(this).cancelAllWork()
-        LocalBroadcastManager.getInstance(instance).sendBroadcast(Intent("abc"));
-    }
-
 
 }

@@ -3,7 +3,7 @@ package com.dexter.baseproject.utilities
 import android.content.Context
 import java.util.concurrent.TimeUnit
 
- fun ConvertMILLISToStandard(millis: Long): CharSequence? {
+ fun convertMILLISToStandard(millis: Long): CharSequence? {
     val day = TimeUnit.MILLISECONDS.toDays(millis).toInt()
     val hours = TimeUnit.MILLISECONDS.toHours(millis) - day * 24
     val minute = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.MILLISECONDS.toHours(millis) * 60
@@ -73,4 +73,8 @@ object SharedPref{
         sharedPref.edit().clear().apply()
     }
 
+}
+fun removeQuotesAndUnescape(uncleanJson: String): String? {
+    val noQuotes = uncleanJson.replace("^\"|\"$".toRegex(), "")
+    return org.apache.commons.text.StringEscapeUtils.unescapeJava(noQuotes)
 }

@@ -9,7 +9,8 @@ interface MainFragContract {
                      val locationId: String?= null, val locationDetails: String?= null, val pricePerMin: Float?= null,
                      val session: Session = Session.UNKOWNN,
                      val duration: Long? = null,
-                     val amount : Float?= null
+                     val amount : Float?= null,
+                     val canShowError: Boolean = false
     ): UiState
 
     sealed class Session{
@@ -33,13 +34,7 @@ interface MainFragContract {
          object NoChange : PartialState()
          data class SetScanData(val locationId: String?= null, val locationDetails: String?= null, val pricePerMin: Float?= null, val session: Session): PartialState()
          data class SetResult(val amount: Float, val duration: Long, val session: Session) : PartialState()
-
-
-
          object ErrorState: PartialState()
     }
-
-    data class QRInfo(val locationId: String?= null, val locationDetails: String?= null, val pricePerMin: Float?= null)
-
 
 }
