@@ -17,16 +17,16 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 
-
 abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
     @LayoutRes contentLayoutId: Int = 0
 ) : Fragment(contentLayoutId), UserInterfaceWithViewEvents<E>, UserInterface<S>, LifecycleObserver {
     private val viewEventsRelay: PublishRelay<E> = PublishRelay.create()
 
     private val intentRelay by lazy { PublishRelay.create<UserIntent>() }
-     protected var schedulerProvider =  AndroidSchedulers.mainThread()
+    protected var schedulerProvider = AndroidSchedulers.mainThread()
     protected val disposable: CompositeDisposable by lazy { CompositeDisposable() }
     private val subscriptions: CompositeDisposable by lazy { CompositeDisposable() }
+
     @Inject
     lateinit var presenter: Lazy<Presenter<S, E>>
     private lateinit var currentState: S
@@ -51,7 +51,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
                     this.currentState = it
                     render(it)
                 }, {
-         Log.e("utkarsh ","inside throwable "+it.printStackTrace())
+                    Log.d("base fragment ", " presenter state error " + it.printStackTrace())
                 })
         )
 
@@ -60,7 +60,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
             presenter.get().attachIntents(
                 Observable.merge(
                     userIntents(),
-                            intentRelay
+                    intentRelay
                 )
             )
         )
@@ -72,6 +72,7 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
             subscriptions.add(disposable)
         }
     }
+
     override fun onPause() {
         subscriptions.clear()
         super.onPause()
@@ -80,15 +81,16 @@ abstract class BaseFragment<S : UiState, E : BaseViewEvent, I : UserIntent>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            disposable.add(presenter.get().viewEvent()
-                .observeOn(schedulerProvider)
-                .subscribe(
-                    {
-                        val viewEvent =  it as E
-                        handleViewEvent(viewEvent)
-                    }, {
-                    }))
-        }
+        disposable.add(presenter.get().viewEvent()
+            .observeOn(schedulerProvider)
+            .subscribe(
+                {
+                    val viewEvent = it as E
+                    handleViewEvent(viewEvent)
+                }, {
+                })
+        )
+    }
 
 
     override fun onDestroyView() {

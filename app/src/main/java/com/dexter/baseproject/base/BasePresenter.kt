@@ -92,7 +92,7 @@ abstract class BasePresenter<S : UiState, P : UiState.Partial<S>, E: BaseViewEve
                             val newState = reduce(currentState, partialState as P)
                             newState
                         } catch (e: Exception) {
-                            Log.e("utkarsh ","inside throwable 3 "+e.message)
+                            Log.d("base fragment ", " presenter scan error " + e.printStackTrace())
                             currentState
                         }
                     }
@@ -102,7 +102,7 @@ abstract class BasePresenter<S : UiState, P : UiState.Partial<S>, E: BaseViewEve
                             stateRelay.accept(it)
                         }
                     }, {
-                        Log.e("utkarsh ","inside throwable 2 "+it.message)
+                        Log.d("base fragment ", " presenter handle error " + it.printStackTrace())
                     })
             )
             isStateSetup = true

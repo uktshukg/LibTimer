@@ -14,13 +14,14 @@ interface MainFragContract {
     ): UiState
 
     sealed class Session{
-        object STARTED: Session()
         object ONGOING: Session()
         object ENDED: Session()
         object UNKOWNN: Session()
     }
     sealed class ViewEvent : BaseViewEvent {
         object ServerErrorToast : ViewEvent()
+        object ResumeTimer : ViewEvent() {
+        }
     }
     sealed class Intent : UserIntent {
         data class ScanData(val scanResults: String) : Intent()

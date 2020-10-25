@@ -32,7 +32,7 @@ class MainFrag :
     private lateinit var amount: TextView
     private lateinit var price: TextView
     private lateinit var locationid: TextView
-    private lateinit var time: TextView
+    private var time: TextView? = null
     private var scanSubject: PublishSubject<String> = PublishSubject.create()
     private var completeSession: PublishSubject<Pair<String, Float>> = PublishSubject.create()
 
@@ -54,7 +54,7 @@ class MainFrag :
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
-                Log.e("utkarsh", "inside 1")
+                showErrorToast()
             } else {
                 if (SharedPref.getLong(context!!, context!!.getString(R.string.start_time)) != 0L) {
                     compositeDisposable.add(Observable.timer(200, TimeUnit.MILLISECONDS).subscribe {
@@ -62,7 +62,6 @@ class MainFrag :
                     })
                 } else {
                     data?.let {
-                        Log.e("utkarsh", "inside 2 " + result.contents.toString())
                         compositeDisposable.add(
                             Observable.timer(200, TimeUnit.MILLISECONDS).subscribe {
                                 scanSubject.onNext(result.contents)
@@ -79,12 +78,10 @@ class MainFrag :
 
 
     override fun userIntents(): Observable<UserIntent> {
-        Log.e("utkarsh", "inside user intents")
         return Observable.mergeArray(
             Observable.just(MainFragContract.Intent.Load),
 
             scanSubject.map {
-                Log.e("utkarsh", "vlaue " + it)
                 MainFragContract.Intent.ScanData(it)
             },
             completeSession.map {
@@ -102,25 +99,15 @@ class MainFrag :
                 duration.text = getString(R.string.duration) + state.duration
                 timerDisposable?.dispose()
                 scanNow.text = "Scan Now"
-                LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent("abc"))
+                LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent("NOTIFICATION_FILTER"))
             }
             else -> {
                 amount.visibility = View.GONE
                 duration.visibility = View.GONE
             }
         }
-        if (state.pricePerMin != null && canResubscibe.not()) {
-            canResubscibe = false
-            val startTime =
-                SharedPref.getLong(context, context!!.getString(R.string.start_time))
-            timerDisposable =
-                (Observable.interval(1, TimeUnit.SECONDS).observeOn(schedulerProvider).subscribe {
-                    time.text = convertMILLISToStandard((System.currentTimeMillis() - startTime))
-                })
-        }
         state.locationDetails?.let {
             locationdetails.text = getString(R.string.location_details) + it
-            scanNow.text = "End"
         }
         state.locationId?.let {
             locationid.text = getString(R.string.location_id) + it
@@ -131,11 +118,7 @@ class MainFrag :
     }
 
 
-    override fun onResume() {
-        canResubscibe = false
-        super.onResume()
 
-    }
 
     override fun onPause() {
         timerDisposable?.dispose()
@@ -145,6 +128,18 @@ class MainFrag :
     override fun handleViewEvent(event: MainFragContract.ViewEvent) {
         when (event) {
             MainFragContract.ViewEvent.ServerErrorToast -> showErrorToast()
+            MainFragContract.ViewEvent.ResumeTimer -> startTimer()
+        }
+    }
+
+    private fun startTimer() {
+        time?.let {tv ->
+            val startTime =
+                SharedPref.getLong(context, context!!.getString(R.string.start_time))
+            timerDisposable =
+                Observable.interval(1, TimeUnit.SECONDS).observeOn(schedulerProvider).subscribe {
+                    tv.text = convertMILLISToStandard((System.currentTimeMillis() - startTime))
+                }
         }
     }
 

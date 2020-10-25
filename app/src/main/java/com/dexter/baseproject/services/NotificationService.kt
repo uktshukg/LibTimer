@@ -48,10 +48,8 @@ class NotificationService : IntentService("MyService") {
         startForeground(NOTIFICATION_ID, notification)
          countDownLatch = CountDownLatch(1)
         disposable=  Observable.interval(1, TimeUnit.SECONDS).subscribe {
-            Log.e("utkarsh","inside intervalRange "+it)
            showProgress(System.currentTimeMillis()- startTime, notificationManager, locationDetails, locationId, price)
         }
-        Log.e("utkarsh","inside")
         countDownLatch.await()
 
     }
@@ -89,7 +87,6 @@ class NotificationService : IntentService("MyService") {
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
-            Log.e("utkarsh","inside recieve ")
             countDownLatch.countDown()
             disposable?.dispose()
              stopForeground(true)
@@ -98,7 +95,7 @@ class NotificationService : IntentService("MyService") {
     }
     override fun onCreate() {
         super.onCreate()
-        LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, IntentFilter("abc"))
+        LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, IntentFilter("NOTIFICATION_FILTER"))
     }
 
     override fun onDestroy() {

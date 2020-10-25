@@ -52,8 +52,7 @@ class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCall
         activityCount++
         if(isWorkManagerStarted) {
             isWorkManagerStarted = false
-            Log.e("utkarsh","inside manager stop ")
-            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("abc"));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("NOTIFICATION_FILTER"));
         }
     }
 
@@ -66,7 +65,6 @@ class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCall
     override fun onActivityStopped(p0: Activity) {
 
         activityCount--
-        Log.e("utkarsh","inside activityCount "+activityCount +" time "+ SharedPref.getLong(this,context.getString(R.string.start_time))+" work manager "+isWorkManagerStarted)
         if(activityCount==0 && SharedPref.getLong(this,context.getString(R.string.start_time))!=0L
             && isWorkManagerStarted.not()){
             isWorkManagerStarted = true

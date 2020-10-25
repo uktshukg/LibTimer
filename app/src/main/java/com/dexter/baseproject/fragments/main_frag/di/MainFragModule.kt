@@ -26,7 +26,6 @@ abstract class MainFragModule {
         @Provides
         @JvmStatic
         fun initialState(): MainFragContract.State {
-            Log.e("utkarsh","inside")
            return MainFragContract.State()
         }
 

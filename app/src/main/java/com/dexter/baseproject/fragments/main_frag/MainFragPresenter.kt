@@ -29,6 +29,7 @@ class MainFragPresenter @Inject constructor(
                     val price = SharedPref.getFloat("price", context)
                     val locationDetails = SharedPref.getString("details", context)
                     if (locationId.isNotBlank()) {
+                        emitViewEvent(MainFragContract.ViewEvent.ResumeTimer)
                         MainFragContract.PartialState.SetScanData(
                             locationDetails,
                             locationId,
@@ -66,12 +67,12 @@ class MainFragPresenter @Inject constructor(
                                     value = it.value.locationDetails,
                                     context = context
                                 )
-
+                                emitViewEvent(MainFragContract.ViewEvent.ResumeTimer)
                                 MainFragContract.PartialState.SetScanData(
                                     it.value.locationId,
                                     it.value.locationDetails,
                                     it.value.pricePerMin,
-                                    MainFragContract.Session.STARTED
+                                    MainFragContract.Session.ONGOING
                                 )
                             } else {
                                 emitViewEvent(MainFragContract.ViewEvent.ServerErrorToast)
@@ -130,7 +131,8 @@ class MainFragPresenter @Inject constructor(
                 locationDetails = partialState.locationDetails,
                 locationId = partialState.locationId,
                 pricePerMin = partialState.pricePerMin,
-                canShowError = false
+                canShowError = false,
+                session= partialState.session
             )
             MainFragContract.PartialState.ErrorState -> currentState.copy(canShowError = true)
             is MainFragContract.PartialState.SetResult -> currentState.copy(
