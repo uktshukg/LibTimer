@@ -134,6 +134,7 @@ class MainFrag :
         when (event) {
             MainFragContract.ViewEvent.ServerErrorToast -> showErrorToast()
             MainFragContract.ViewEvent.ResumeTimer -> startTimer()
+            MainFragContract.ViewEvent.SubmitData -> showSubmitToast()
         }
     }
 
@@ -159,5 +160,8 @@ class MainFrag :
 
     private fun showErrorToast() {
         Toast.makeText(context!!, "Something happened worng", Toast.LENGTH_LONG).show()
+    }
+    private fun showSubmitToast() {
+        Toast.makeText(context!!, "Submitting Data", Toast.LENGTH_LONG).show()
     }
 }

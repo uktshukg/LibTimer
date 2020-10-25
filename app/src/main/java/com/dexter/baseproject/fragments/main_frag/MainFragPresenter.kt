@@ -102,7 +102,10 @@ class MainFragPresenter @Inject constructor(
                 }
                 .map {
                     when (it) {
-                        is Result.Progress -> MainFragContract.PartialState.NoChange
+                        is Result.Progress -> {
+                            emitViewEvent(MainFragContract.ViewEvent.SubmitData)
+                            MainFragContract.PartialState.NoChange
+                        }
                         is Result.Success -> {
                             SharedPref.clearAll(context)
                             MainFragContract.PartialState.SetResult(
