@@ -2,17 +2,16 @@ package com.dexter.baseproject.fragments.main_frag
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.dexter.baseproject.utilities.convertMILLISToStandard
 import com.dexter.baseproject.R
-import com.dexter.baseproject.utilities.SharedPref
 import com.dexter.baseproject.base.BaseFragment
 import com.dexter.baseproject.base.UserIntent
+import com.dexter.baseproject.utilities.SharedPref
+import com.dexter.baseproject.utilities.convertMILLISToStandard
 import com.google.zxing.integration.android.IntentIntegrator
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -99,7 +98,13 @@ class MainFrag :
                 duration.text = getString(R.string.duration) + state.duration
                 timerDisposable?.dispose()
                 scanNow.text = "Scan Now"
-                LocalBroadcastManager.getInstance(context!!).sendBroadcast(Intent("NOTIFICATION_FILTER"))
+                LocalBroadcastManager.getInstance(context!!)
+                    .sendBroadcast(Intent("NOTIFICATION_FILTER"))
+            }
+            MainFragContract.Session.ONGOING -> {
+                amount.visibility = View.GONE
+                duration.visibility = View.GONE
+                scanNow.text = "END"
             }
             else -> {
                 amount.visibility = View.GONE
@@ -118,8 +123,6 @@ class MainFrag :
     }
 
 
-
-
     override fun onPause() {
         timerDisposable?.dispose()
         super.onPause()
@@ -133,7 +136,7 @@ class MainFrag :
     }
 
     private fun startTimer() {
-        time?.let {tv ->
+        time?.let { tv ->
             val startTime =
                 SharedPref.getLong(context, context!!.getString(R.string.start_time))
             timerDisposable =
