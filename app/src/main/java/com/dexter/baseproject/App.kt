@@ -10,12 +10,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.multidex.MultiDex
 import androidx.work.*
 import com.dexter.baseproject.frag_one.ForegroundWorker
-import com.dexter.baseproject.frag_one.NotificationService
-import com.dexter.baseproject.frag_one.TimeWorker
+import com.dexter.baseproject.services.NotificationService
+import com.dexter.baseproject.utilities.SharedPref
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCallbacks,
@@ -78,11 +77,11 @@ class App : Application(), HasAndroidInjector, Application.ActivityLifecycleCall
     override fun onActivityStopped(p0: Activity) {
 
         activityCount--
-        Log.e("utkarsh","inside activityCount "+activityCount +" time "+SharedPref.getLong(this,context.getString(R.string.start_time))+" work manager "+isWorkManagerStarted)
+        Log.e("utkarsh","inside activityCount "+activityCount +" time "+ SharedPref.getLong(this,context.getString(R.string.start_time))+" work manager "+isWorkManagerStarted)
         if(activityCount==0 && SharedPref.getLong(this,context.getString(R.string.start_time))!=0L
             && isWorkManagerStarted.not()){
             isWorkManagerStarted = true
-            startService(Intent(this,NotificationService::class.java))
+            startService(Intent(this, NotificationService::class.java))
         }
 
     }

@@ -1,5 +1,6 @@
 package com.dexter.baseproject
 
+import com.dexter.baseproject.api.ApiClient
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -17,7 +18,7 @@ class NetworkModule {
     companion object{
         @Provides
         @JvmStatic
-        fun apiClient ():ApiClient{
+        fun apiClient (): ApiClient {
             val interceptor = HttpLoggingInterceptor()
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
             val client =

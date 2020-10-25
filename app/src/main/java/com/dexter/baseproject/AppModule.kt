@@ -1,6 +1,7 @@
 package com.dexter.baseproject
 
 import android.content.Context
+import com.dexter.baseproject.scopes.AppScope
 import dagger.Module
 import dagger.Provides
 
