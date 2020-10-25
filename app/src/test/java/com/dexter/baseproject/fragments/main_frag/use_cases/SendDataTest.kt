@@ -13,8 +13,10 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Completable
 import junit.framework.TestCase
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 
 class SendDataTest {
 
@@ -39,6 +41,23 @@ class SendDataTest {
 
 
    }
+
+    @Test
+    fun `executes fail when amount is wrongly calculated`(){
+        val currentTime = System.currentTimeMillis()
+        val request = SendData.Request("123",2.0f, currentTime-600000 )
+        whenever(apiclient.sendData(
+            any()
+        )).doReturn(Completable.complete())
+        val testObserver =  sendData.execute(request).test()
+
+
+        Assert.assertTrue(testObserver.values().last() != Result.Success(30.0f to 10L))
+
+        testObserver.dispose()
+
+
+    }
 
 
 }
